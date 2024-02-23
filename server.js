@@ -23,6 +23,10 @@ server.get('/videos', async (request, reply) =>{
     return videos
 } )
 
+server.get('/', ()=>{
+    return '/videos to list all videos, /videos/:id to get a specific video, /videos to create a video, /videos/:id to update a video, /videos/:id to delete a video'
+})
+
 server.put('/videos/:id', async (request, reply) =>{
     const videoId = request.params.id
     const {title, description, duration, zone} = request.body
