@@ -15,14 +15,14 @@ GET https://api-nodejs-7vxu.onrender.com/videos
 
 ###
 
-PUT https://api-nodejs-7vxu.onrender.com/videos/5ce5085a-4f2c-4fae-8dde-94a21af3f3fa
+PUT https://api-nodejs-7vxu.onrender.com/videos/dbaa1cf9-6ff0-4bc4-8614-1bbda56a5526
 Content-Type: application/json
 
 {
-    "title":"aslkdja",
-    "description":"aklsd",
-    "duration":12321,
-    "zone":"asd"
+    "title":"video alterado por requisição put",
+    "description":"dados alterados por requisição put",
+    "duration":5555,
+    "zone":"es"
 }
 
 ###

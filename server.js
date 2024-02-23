@@ -1,8 +1,11 @@
 import {fastify} from 'fastify'
 import { db_postgres } from './db_postgres.js'
+import fastifyCors from 'fastify-cors';
 import 'dotenv/config'
 const server = fastify()
 const postgres = new db_postgres()
+
+server.register(fastifyCors);
 
 server.post('/videos', async (request, reply) =>{
 
