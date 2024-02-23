@@ -1,4 +1,4 @@
-POST http://localhost:3333/videos
+POST https://api-nodejs-7vxu.onrender.com/videos
 Content-Type: application/json
 
 {
@@ -10,13 +10,12 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3333/videos
+GET https://api-nodejs-7vxu.onrender.com/videos
 #?search={OpA}
 
 ###
 
 PUT https://api-nodejs-7vxu.onrender.com/videos/dbaa1cf9-6ff0-4bc4-8614-1bbda56a5526
-PUT http://localhost:3333/videos/5ce5085a-4f2c-4fae-8dde-94a21af3f3fa
 Content-Type: application/json
 
 {
@@ -28,4 +27,4 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3333/videos/5ce5085a-4f2c-4fae-8dde-94a21af3f3fa
+DELETE https://api-nodejs-7vxu.onrender.com/videos/5ce5085a-4f2c-4fae-8dde-94a21af3f3fa
