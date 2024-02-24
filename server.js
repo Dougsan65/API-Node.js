@@ -14,6 +14,9 @@ server.addHook('onRequest', (request, reply, done) => {
 
 
 
+server.options('/videos', async (request, reply) => {
+    reply.status(200).send();
+});
 
 server.post('/videos', async (request, reply) =>{
 
@@ -28,9 +31,6 @@ server.post('/videos', async (request, reply) =>{
     return reply.status(201).send()
 } )
 
-server.options('/videos', async (request, reply) => {
-    reply.status(200).send();
-});
 
 server.get('/videos', async (request, reply) =>{
     const search = request.query.search
