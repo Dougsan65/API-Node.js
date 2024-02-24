@@ -18,23 +18,28 @@ server.options('/videos', async (request, reply) => {
     reply.status(200).send();
 });
 
-server.post('/videos', async (request, reply) =>{
+server.post('/videos', async (request, reply) => {
+    try {
+        const { title, description, duration, zone } = request.body;
 
-    const {title, description, duration, zone} = request.body
+        await postgres.create({
+            title,
+            description,
+            duration,
+            zone,
+        });
 
-    await postgres.create({
-        title,
-        description,
-        duration,
-        zone,
-    })
-    return reply.status(201).send()
-} )
+        reply.status(201).send({ message: 'Video created successfully!' });
+    } catch (error) {
+        console.error(error);
+        reply.status(500).send({ error: 'Failed to create video' });
+    }
+});
 
 
 server.get('/videos', async (request, reply) =>{
     const search = request.query.search
-    const videos = postgres.list(search)
+    const videos = await postgres.list(search)
     return videos
 } )
 
@@ -42,7 +47,7 @@ server.put('/videos/:id', async (request, reply) =>{
     const videoId = request.params.id
     const {title, description, duration, zone} = request.body
 
-    postgres.update(videoId,{
+    await postgres.update(videoId,{
         title,
         description,
         duration,
@@ -55,7 +60,7 @@ server.put('/videos/:id', async (request, reply) =>{
 server.delete('/videos/:id', async (request, reply) =>{
     const videoId = request.params.id
 
-    postgres.delete(videoId)
+    await postgres.delete(videoId)
     return reply.status(200).send()
 } )
 
