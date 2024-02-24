@@ -18,11 +18,17 @@ export class db_postgres{
         return videos
     }
 
-    async create(video){
-        const videoID = randomUUID()
-        await sql`INSERT INTO videos (id, title, description, duration, zone) VALUES (${videoID}, ${video.title}, ${video.description}, ${video.duration}, ${video.zone})`
-        .catch((error) =>{console.log(error)})
+    async create(video) {
+        try {
+            const videoID = randomUUID();
+            await sql`INSERT INTO videos (id, title, description, duration, zone) VALUES (${videoID}, ${video.title}, ${video.description}, ${video.duration}, ${video.zone})`;
+            return { success: true, message: 'Vídeo criado com sucesso!' };
+        } catch (error) {
+            console.error('Erro ao criar o vídeo:', error);
+            return { success: false, message: 'Erro ao criar o vídeo. Por favor, tente novamente.' };
+        }
     }
+    
 
     
     async update(id, video){
