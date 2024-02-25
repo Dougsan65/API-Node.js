@@ -46,7 +46,7 @@ export class db_postgres{
         try {
             const videoID = randomUUID();
             const currentDate = new Date().toISOString();
-            await sql`INSERT INTO usuariosregistrados (id, name, email, password, date) VALUES (${videoID}, ${user.name}, ${user.email}, ${user.password}, ${currentDate})`;
+            await sql`INSERT INTO usuariosregistrados (id, nomeusuario, email, senha, datacriacao) VALUES (${videoID}, ${user.name}, ${user.email}, ${user.password}, ${currentDate})`;
             return { success: true, message: 'Usuário criado com sucesso!' };
         } catch (error) {
             console.error('Erro ao criar o usuário:', error);
