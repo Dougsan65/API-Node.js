@@ -16,6 +16,27 @@ server.addHook('onRequest', (request, reply, done) => {
     }
 });
 
+server.post('/registrarusuario', async (request, reply) => {
+    try {
+        const { name, email, password, date } = request.body;
+        await postgres.create_user({
+            name,
+            email,
+            password,
+            date,
+        });
+        reply.status(201).send({ message: 'User created successfully!' });
+    } catch (error) {
+        console.error(error);
+        reply.status(500).send({ error: 'Failed to create user' });
+    }
+});
+
+
+
+
+
+
 server.post('/videos', async (request, reply) => {
     try {
         const { title, description, duration, zone } = request.body;

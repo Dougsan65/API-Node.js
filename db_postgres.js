@@ -41,4 +41,16 @@ export class db_postgres{
        await sql`DELETE FROM videos WHERE id = ${id}`
        .catch((error) =>{console.log(error)})
     }
+
+    async create_user(user){
+        try {
+            const videoID = randomUUID();
+            const currentDate = new Date().toISOString();
+            await sql`INSERT INTO usuariosregistrados (id, name, email, password, date) VALUES (${videoID}, ${user.name}, ${user.email}, ${user.password}, ${currentDate})`;
+            return { success: true, message: 'Usuário criado com sucesso!' };
+        } catch (error) {
+            console.error('Erro ao criar o usuário:', error);
+            return { success: false, message: 'Erro ao criar o usuário. Por favor, tente novamente.' };
+        }
+    }
 }
