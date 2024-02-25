@@ -53,4 +53,32 @@ export class db_postgres{
             return { success: false, message: 'Erro ao criar o usuário. Por favor, tente novamente.' };
         }
     }
+
+    async list_users(search){
+        let users
+
+        if (search){
+            users = await sql`SELECT * FROM usuariosregistrados WHERE nomeusuario ILIKE ${search}`
+            .catch((error) =>{console.log(error)})
+         }
+         else{
+             users = await sql`SELECT * FROM usuariosregistrados`
+             .catch((error) =>{console.log(error)})
+         }
+         return users
+    }
+
+    async list_emails(search){
+        let emails
+
+        if (search){
+            emails = await sql`SELECT * FROM usuariosregistrados WHERE email ILIKE ${search}`
+            .catch((error) =>{console.log(error)})
+         }
+         else{
+             emails = await sql`SELECT * FROM usuariosregistrados`
+             .catch((error) =>{console.log(error)})
+         }
+         return emails
+    }
 }

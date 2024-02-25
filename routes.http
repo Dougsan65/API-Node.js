@@ -31,12 +31,11 @@ DELETE https://api-nodejs-7vxu.onrender.com/videos/b5511f56-a3c1-4f3a-ba8e-7a649
 
 ###
 
-POST https://localhost:3333/registrarusuario
+POST http://localhost:3333/registrarusuario
 Content-Type: application/json
 
 {
-    "name":"douglas",
-    "email":"dados alterados por requisição put",
-    "password":5555,
-    "date":"2021-08-20T00:00:00.000Z"
+    "name":"douglass",
+    "email":"dados",
+    "password":5555
 }

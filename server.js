@@ -18,12 +18,11 @@ server.addHook('onRequest', (request, reply, done) => {
 
 server.post('/registrarusuario', async (request, reply) => {
     try {
-        const { name, email, password, date } = request.body;
+        const { name, email, password } = request.body;
         await postgres.create_user({
             name,
             email,
             password,
-            date,
         });
         reply.status(201).send({ message: 'User created successfully!' });
     } catch (error) {
@@ -32,7 +31,17 @@ server.post('/registrarusuario', async (request, reply) => {
     }
 });
 
+server.get('/usuariosregistrados', async (request, reply) => {
+    const search = request.query.search;
+    const users = await postgres.list_users(search);
+    return users;
+});
 
+server.get('/emailsregistrados', async (request, reply) => {
+    const search = request.query.search;
+    const emails = await postgres.list_emails(search);
+    return emails;
+});
 
 
 
