@@ -1,5 +1,7 @@
 import { fastify } from 'fastify';
 import { db_postgres } from './db_postgres.js';
+import jwt from 'jsonwebtoken';
+
 
 import 'dotenv/config';
 const server = fastify();
@@ -44,13 +46,19 @@ server.get('/emailsregistrados', async (request, reply) => {
 });
 
 server.post('/autenticacaologin', async (request, reply) => {
+    const jwtSecret = process.env.JWT_SECRET;
     try {
         const { name, password } = request.body;
         const user = await postgres.verifyCredentials(name, password);
-        console.log(user);
+
+        
+        const token = jwt.sign({ id: user[0].id, name: user[0].name }, jwtSecret, { expiresIn: '1h' });
+        
+        
         if (user.length > 0) {
             console.log(user)
-            reply.status(200).send({ message: 'User authenticated successfully!' });
+            console.log(token)
+            reply.status(200).send({ message: 'User authenticated successfully!', token: token});
         } else {
             reply.status(404).send({ error: 'Failed to authenticate user', });
         }
@@ -58,6 +66,7 @@ server.post('/autenticacaologin', async (request, reply) => {
         reply.status(500).send({ error: 'Failed to authenticate user', });
     }
 });
+
 
 
 
