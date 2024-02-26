@@ -43,6 +43,27 @@ server.get('/emailsregistrados', async (request, reply) => {
     return emails;
 });
 
+server.post('/autenticacaologin', async (request, reply) => {
+    try {
+        const { name, password } = request.body;
+        const user = await postgres.verifyCredentials(name, password);
+        console.log(user);
+        if (user.length > 0) {
+            console.log(user)
+            reply.status(200).send({ message: 'User authenticated successfully!' });
+        } else {
+            reply.status(404).send({ error: 'Failed to authenticate user', });
+        }
+    } catch (error) {
+        reply.status(500).send({ error: 'Failed to authenticate user', });
+    }
+});
+
+
+
+
+
+
 
 
 

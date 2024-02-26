@@ -29,14 +29,11 @@ export class db_postgres{
         }
     }
     
-
-    
     async update(id, video){
         await sql`UPDATE videos SET title = ${video.title}, description = ${video.description}, duration = ${video.duration}, zone = ${video.zone} WHERE id = ${id}`
         .catch((error) =>{console.log(error)})
     }
 
-    
     async delete(id){
        await sql`DELETE FROM videos WHERE id = ${id}`
        .catch((error) =>{console.log(error)})
@@ -81,4 +78,12 @@ export class db_postgres{
          }
          return emails
     }
+
+    async verifyCredentials(name, password){
+        let user = await sql`SELECT * FROM usuariosregistrados WHERE nomeusuario = ${name} AND senha = ${password}`
+        .catch((error) =>{console.log(error)})
+        return user
+    }
+
+
 }

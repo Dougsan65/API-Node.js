@@ -39,3 +39,12 @@ Content-Type: application/json
     "email":"dados",
     "password":5555
 }
+###
+
+POST http://localhost:3333/autenticacaologin
+Content-Type: application/json
+
+{
+    "name":"envyus655",
+    "password":"134679852As1"
+}
