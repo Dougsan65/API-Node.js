@@ -56,6 +56,7 @@ server.post('/autenticacaologin', async (request, reply) => {
         
         
         if (user.length > 0) {
+            
             console.log(user)
             console.log(token)
             reply.status(200).send({ message: 'User authenticated successfully!', token: token});
