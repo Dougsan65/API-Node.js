@@ -9,8 +9,8 @@ const postgres = new db_postgres();
 
 server.addHook('onRequest', (request, reply, done) => {
     reply.header('Access-Control-Allow-Origin', '*');
-    reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    reply.header('Access-Control-Allow-Headers', 'Content-Type');
+    reply.header('Access-Control-Allow-Methods', '*');
+    reply.header('Access-Control-Allow-Headers', '*');
     if (request.method === 'OPTIONS') {
         reply.status(200).send();
     } else {
@@ -33,15 +33,17 @@ server.post('/registrarusuario', async (request, reply) => {
     }
 });
 
-server.get('/usuariosregistrados', async (request, reply) => {
+server.get('/usuariosregistrados', {preHandler: verifyToken}, async (request, reply) => {
     const search = request.query.search;
     const users = await postgres.list_users(search);
+    console.log(request.user.id, request.user.name)
     return users;
 });
 
-server.get('/emailsregistrados', async (request, reply) => {
+server.get('/emailsregistrados',  {preHandler: verifyToken}, async (request, reply) => {
     const search = request.query.search;
     const emails = await postgres.list_emails(search);
+    
     return emails;
 });
 
@@ -50,9 +52,10 @@ server.post('/autenticacaologin', async (request, reply) => {
     try {
         const { name, password } = request.body;
         const user = await postgres.verifyCredentials(name, password);
+        console.log(user)
 
         
-        const token = jwt.sign({ id: user[0].id, name: user[0].name }, jwtSecret, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user[0].id, name: user[0].nomeusuario }, jwtSecret, { expiresIn: '1h' });
         
         
         if (user.length > 0) {
@@ -76,8 +79,7 @@ server.post('/autenticacaologin', async (request, reply) => {
 
 
 
-
-server.post('/videos', async (request, reply) => {
+server.post('/videos', {preHandler: verifyToken}, async (request, reply) => {
     try {
         const { title, description, duration, zone } = request.body;
 
@@ -95,13 +97,14 @@ server.post('/videos', async (request, reply) => {
     }
 });
 
-server.get('/videos', async (request, reply) => {
+server.get('/videos', {preHandler: verifyToken}, async (request, reply) => {
     const search = request.query.search;
     const videos = await postgres.list(search);
+    console.log(request.user.id, request.user.name)
     return videos;
 });
 
-server.put('/videos/:id', async (request, reply) => {
+server.put('/videos/:id', {preHandler: verifyToken}, async (request, reply) => {
     const videoId = request.params.id;
     const { title, description, duration, zone } = request.body;
 
@@ -115,12 +118,35 @@ server.put('/videos/:id', async (request, reply) => {
     return reply.status(204).send();
 });
 
-server.delete('/videos/:id', async (request, reply) => {
+server.delete('/videos/:id', {preHandler: verifyToken}, async (request, reply) => {
     const videoId = request.params.id;
 
     await postgres.delete(videoId);
     return reply.status(200).send();
 });
+
+async function verifyToken(request, reply) {
+    const jwtSecret = process.env.JWT_SECRET;
+    const token = request.headers.authorization;
+    
+    if (!token) {
+        reply.status(401).send({ error: 'No token provided' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, jwtSecret);
+        request.user = decoded.name;
+        console.log(decoded.id, decoded.name);
+        request.user = {
+            id: decoded.id,
+            name: decoded.name,
+        };
+        
+        return;
+    } catch (error) {
+        reply.status(401).send({ error: 'Failed to authenticate token' });
+    }
+}
 
 server.listen({
     host: '0.0.0.0',
