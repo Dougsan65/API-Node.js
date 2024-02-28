@@ -71,6 +71,10 @@ server.post('/autenticacaologin', async (request, reply) => {
     }
 });
 
+server.get('/verificartoken', {preHandler: verifyToken}, async (request, reply) => {
+    reply.status(200).send({ message: 'Token verified successfully!' });
+});
+
 
 
 
