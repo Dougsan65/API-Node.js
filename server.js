@@ -75,6 +75,16 @@ server.get('/verificartoken', {preHandler: verifyToken}, async (request, reply) 
     reply.status(200).send({ message: 'Token verified successfully!' });
 });
 
+server.post('/gerartokenTemporario', async (request, reply) => {
+    const jwtSecret = process.env.JWT_SECRET;
+    const { name } = request.body; 
+    console.log(name)
+
+    const token = jwt.sign({ name }, jwtSecret, { expiresIn: '10m' });
+    console.log(token)
+    reply.status(200).send({ message: 'Temporary token generated successfully!', token });
+});
+
 
 
 
