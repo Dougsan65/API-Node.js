@@ -78,13 +78,31 @@ server.get('/verificartoken', {preHandler: verifyToken}, async (request, reply) 
 server.post('/gerartokenTemporario', async (request, reply) => {
     const jwtSecret = process.env.JWT_SECRET;
     const { name } = request.body; 
-    console.log(name)
 
     const token = jwt.sign({ name }, jwtSecret, { expiresIn: '10m' });
-    console.log(token)
     reply.status(200).send({ message: 'Temporary token generated successfully!', token });
 });
 
+server.post('/criarpersonagem', {preHandler: verifyToken}, async (request, reply) => {
+    try {
+        const userID = request.user.id;
+        const { name } = request.body;
+        await postgres.create_character({
+            name,
+            userID
+        });
+        reply.status(201).send({ message: 'Character created successfully!' });
+    } catch (error) {
+        console.error(error);
+        reply.status(500).send({ error: 'Failed to create character' });
+    }
+});
+
+server.get('/personagens', {preHandler: verifyToken}, async (request, reply) => {
+    const userID = request.user.id;
+    const characters = await postgres.list_characters(userID);
+    return characters;
+});
 
 
 
@@ -114,7 +132,6 @@ server.post('/videos', {preHandler: verifyToken}, async (request, reply) => {
 server.get('/videos', {preHandler: verifyToken}, async (request, reply) => {
     const search = request.query.search;
     const videos = await postgres.list(search);
-    console.log(request.user.id, request.user.name)
     return videos;
 });
 
@@ -150,7 +167,7 @@ async function verifyToken(request, reply) {
     try {
         const decoded = jwt.verify(token, jwtSecret);
         request.user = decoded.name;
-        console.log(decoded.id, decoded.name);
+        // console.log(decoded.id, decoded.name);
         request.user = {
             id: decoded.id,
             name: decoded.name,

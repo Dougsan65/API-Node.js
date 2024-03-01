@@ -85,5 +85,36 @@ export class db_postgres{
         return user
     }
 
+    async create_character(character){
+        console.log(character.name, character.userID);
+        const result = await sql`SELECT COUNT(nomepersonagem) AS total_personagens FROM personagens WHERE id_usuario = ${character.userID}`;
+        const totalPersonagens = result[0].total_personagens;
+
+        // Verificar se o usuário já possui mais de 3 personagens
+        if (totalPersonagens >= 3) {
+            return { success: false, message: 'Você já possui o número máximo de personagens.' };
+        }
+
+        try {
+            const currentDate = new Date();
+            await sql`INSERT INTO personagens (id_usuario, nomepersonagem, xp, nivel, datacriacao) VALUES (${character.userID}, ${character.name}, 0, 1, ${currentDate})`;
+            return { success: true, message: 'Personagem criado com sucesso!' };
+        } catch (error) {
+            if (error.code === '23505') {
+                throw new Error('Personagem com o mesmo nome já existe.');
+            } else {
+                throw new Error('Erro ao criar o personagem. Por favor, tente novamente.');
+            }
+            
+        }
+    }
+
+    async list_characters(userID){
+        let characters = await sql`SELECT * FROM personagens WHERE id_usuario = ${userID}`
+        .catch((error) =>{console.log(error)})
+        return characters
+    }
+    
+
 
 }

@@ -1,9 +1,18 @@
-import { sql } from './db_connect.js';
+// import { sql } from './db_connect.js';
 
-sql `CREATE TABLE videos (
-    id text PRIMARY KEY,
-    title VARCHAR(100),
-    description TEXT,
-    duration INT,
-    zone VARCHAR(100)
-);`.catch((error) => {console.log(error)})
+// CREATE TABLE usuariosregistrados(
+//     id text PRIMARY KEY,
+//     nomeusuarioVARCHAR(100),
+//     email VARCHAR(100),
+//     senhaI VARCHAR(100),
+//     datacriacao date
+
+// CREATE TABLE personagens (
+//     id_usuario text,
+//     FOREIGN KEY (id_usuario) REFERENCES usuariosregistrados(id),
+//     nomepersonagem VARCHAR(100),
+//     xp INT,
+//     nivel INT,
+//     datacriacao date,
+//     PRIMARY KEY (id_usuario, nomepersonagem)
+// );
