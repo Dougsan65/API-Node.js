@@ -1,4 +1,4 @@
-import { sql } from './db_connect.js';
+import { sql } from './src/db/db_connect.js';
 import { randomUUID } from "crypto"
 
 export class db_postgres{
